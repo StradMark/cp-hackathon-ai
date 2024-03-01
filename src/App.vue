@@ -1,47 +1,39 @@
 <template>
   <div>
-    <input type="text" v-model="message" />
-    <button @click="callAPI(message)">Prompt</button>
+    <input type="text" v-model="query" />
+    <button @click="interactWithChat(query)">Chat</button>
+
+    <div :key="data.query" v-for="data in chatData">
+      <div>Question: {{ data.query }}</div>
+      <div>Response: {{ data.response }}</div>
+    </div>
   </div>
 </template>
 
 <script setup async>
 import { ref } from "vue";
-import axios from 'axios';
 
-const message = ref('');
+const query = ref('');
+let chatData = ref([]);
 
+const apiKey = process.env.VUE_APP_API_KEY;
 
-// Make a request for a user with a given ID
-function callAPI(message) {
-  console.log(message);
-  axios.get('/user?ID=12345')
-  .then(function (response) {
-    // handle success
-    console.log(response);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .finally(function () {
-    // always executed
-  });
+import { ChatOpenAI } from "@langchain/openai";
+
+const chatModel = new ChatOpenAI({
+  openAIApiKey: apiKey
+});
+
+async function interactWithChat(query) {
+  try {
+    const data = await chatModel.invoke(query);
+    chatData.value.push({
+      query: query,
+      response: data.content
+    })
+    console.log("Response:", data);
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
-
-
-// import { ChatOpenAI } from "@langchain/openai";
-
-// const chatModel = new ChatOpenAI({
-//   openAIApiKey: "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"
-// });
-
-// async function interactWithChat(message) {
-//   try {
-//     const response = await chatModel.invoke(message);
-//     console.log("Response:", response);
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// }
 </script>
