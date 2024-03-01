@@ -63,6 +63,11 @@
     margin-left: auto;
   }
 
+  .chat-message-ai .chat-message-author,
+  .chat-message-error .chat-message-author {
+    text-align: end;
+  }
+
   .chat-message-author {
     display: block;
     font-size: 0.7em;
@@ -71,9 +76,8 @@
     opacity: 0.6;
   }
 
-  .chat-message-ai .chat-message-author,
-  .chat-message-error .chat-message-author {
-    text-align: end;
+  .chat-message-contents {
+    white-space-collapse: preserve-breaks;
   }
 
   @keyframes loading-pulse {
@@ -98,7 +102,7 @@
       <template :key="data.message" v-for="data in chatData">
         <div v-bind:class="data.classes">
           <div class="chat-message-author">{{ data.author }}</div>
-          <div>{{ data.message }}</div>
+          <div class="chat-message-contents">{{ data.message }}</div>
         </div>
       </template>
       <template v-if="isAiBusy">
