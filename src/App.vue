@@ -1,17 +1,26 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+Henk
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import { ChatOpenAI } from "@langchain/openai";
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+const chatModel = new ChatOpenAI({
+  openAIApiKey: "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"
+});
+
+console.log(chatModel);
+async function interactWithChat(message) {
+  try {
+    const response = await chatModel.invoke(message);
+    console.log("Response:", response);
+  } catch (error) {
+    console.error("Error:", error);
   }
 }
+const response = await interactWithChat("What is 1 + 1?")
+
+console.log(response);
 </script>
 
 <style>
