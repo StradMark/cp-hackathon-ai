@@ -1,35 +1,47 @@
 <template>
-Henk
+  <div>
+    <input type="text" v-model="message" />
+    <button @click="callAPI(message)">Prompt</button>
+  </div>
 </template>
 
-<script setup>
-import { ChatOpenAI } from "@langchain/openai";
+<script setup async>
+import { ref } from "vue";
+import axios from 'axios';
 
-const chatModel = new ChatOpenAI({
-  openAIApiKey: "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"
-});
+const message = ref('');
 
-console.log(chatModel);
-async function interactWithChat(message) {
-  try {
-    const response = await chatModel.invoke(message);
-    console.log("Response:", response);
-  } catch (error) {
-    console.error("Error:", error);
-  }
+
+// Make a request for a user with a given ID
+function callAPI(message) {
+  console.log(message);
+  axios.get('/user?ID=12345')
+  .then(function (response) {
+    // handle success
+    console.log(response);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .finally(function () {
+    // always executed
+  });
 }
-const response = await interactWithChat("What is 1 + 1?")
 
-console.log(response);
+
+// import { ChatOpenAI } from "@langchain/openai";
+
+// const chatModel = new ChatOpenAI({
+//   openAIApiKey: "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"
+// });
+
+// async function interactWithChat(message) {
+//   try {
+//     const response = await chatModel.invoke(message);
+//     console.log("Response:", response);
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
